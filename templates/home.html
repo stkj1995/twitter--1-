@@ -56,7 +56,7 @@
                 {% for row in rows: %}
                 {% include "_tweet.html" %}
                 {% endfor %}
-                <article class="post">
+                <!-- <article class="post">
                     <img src="https://avatar.iran.liara.run/public/49" alt="Profile Picture" class="avatar">
                     <div class="post-content">
                         <div class="post-header">
@@ -139,7 +139,7 @@
                             <span class="action"><i class="fa-solid fa-share"></i></span>
                         </div>
                     </div>
-                </article>
+                </article> -->
             </main>
 
         </main>
@@ -149,9 +149,12 @@
                 <button>Search</button>
             </form>
             <div class="happening-now">
-                <h2>What's happening now</h2>
+                <h2>What's happening now?</h2>
                 <div class="trending">
-                    <div class="trending-item">
+                    {% for row in trends %}
+                    {% include "_happening.html" %}
+                    {% endfor %}
+                    <!-- <div class="trending-item">
                         <div class="trending-info">
                             <span class="item_title">Trending in Denmark</span>
                             <p>Grækenland</p>
@@ -178,7 +181,7 @@
                             <p>Italien</p>
                         </div>
                         <span class="option">⋮</span>
-                    </div>
+                    </div> -->
                     <button class="show-more-btn">Show more</button>
                 </div>
 

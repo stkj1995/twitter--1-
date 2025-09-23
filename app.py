@@ -113,11 +113,11 @@ def view_home():
         #user = session.get("user", "")
         # if not user: return redirect(url_for("view_login"))
         db, cursor = x.db()
-        q = "SELECT * FROM users JOIN posts ON user_pk = post_user_fk WHERE user_pk = 1"
+        q = "SELECT category, topic FROM trends ORDER BY created_at DESC LIMIT 5"
         cursor.execute(q)
-        rows = cursor.fetchall()
-        ic(rows)
-        return render_template("home.html", rows=rows)
+        trends = cursor.fetchall()
+        ic(trends)
+        return render_template("home.html", trends=trends)
     except Exception as ex:
         ic(ex)
         return "error"
