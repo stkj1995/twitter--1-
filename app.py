@@ -113,18 +113,45 @@ def view_home():
         #user = session.get("user", "")
         # if not user: return redirect(url_for("view_login"))
         db, cursor = x.db()
-        q = "SELECT category, topic FROM trends ORDER BY created_at DESC LIMIT 5"
-        cursor.execute(q)
+        # Follow suggestions
+        q_follow = "SELECT * FROM follow_suggestions ORDER BY created_at DESC LIMIT 5"
+        cursor.execute(q_follow)
+        follow_suggestions = cursor.fetchall()
+        
+        # Trends
+        q_trends = "SELECT * FROM trends ORDER BY created_at DESC LIMIT 5"
+        cursor.execute(q_trends)
         trends = cursor.fetchall()
-        ic(trends)
-        return render_template("home.html", trends=trends)
+        
+        # Tweets
+        q_tweet = "SELECT * FROM posts ORDER BY post_pk DESC LIMIT 10"
+        cursor.execute(q_tweet)
+        tweet = cursor.fetchall()
+
+        # Posts
+        q_posts = "SELECT * FROM users JOIN posts ON user_pk = post_user_fk ORDER BY RAND() LIMIT 10"
+        cursor.execute(q_posts)
+        rows = cursor.fetchall()
+        
+        # Hearts / likes
+        q_heart = "SELECT * FROM posts ORDER BY post_total_likes DESC LIMIT 10"
+        cursor.execute(q_heart)
+        heart = cursor.fetchall()
+        
+        return render_template(
+            "home.html",
+            follow_suggestions=follow_suggestions,
+            trends=trends,
+            tweet=tweet,
+            heart=heart,
+            rows=rows,
+        )
     except Exception as ex:
         ic(ex)
         return "error"
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
-  
 
 
 
