@@ -53,6 +53,9 @@
 
         <main>
             <main>
+                {% for row in rows: %}
+                {% include "_tweet.html" %}
+                {% endfor %}
                 <article class="post">
                     <img src="https://avatar.iran.liara.run/public/49" alt="Profile Picture" class="avatar">
                     <div class="post-content">

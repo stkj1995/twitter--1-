@@ -1,17 +1,20 @@
-<div class="post">
-    <div class="left">
-        <img src="{{ url_for('static', filename='images/avatar_2.jpg') }}">
-    </div>
-    <div class="right">
-        <div>
-            <span>Nick Som</span>
-            <span class="username">@nsom</span>
+<article class="post">
+    <img src="{{ row.user_avatar_path }}" alt="Profile Picture" class="avatar">
+    <div class="post-content">
+        <div class="post-header">
+            <span class="name">
+                {{ row.user_username }}
+            </span>
+            <span class="handle">@jonass</span> · <span class="time">1d</span>
         </div>
-        <div class="content">
-            Can anyone explain what Charlie Kirk’s two “security guards” to his back right were doing the
-            seconds before he was fatally shot? One grabs his cap and tugs his ear, then intently films…
-            looking to the other, who does something blatantly odd with his arms… then the shot rings
+        <p class="text">{{ row.post_message }}</p>
+        <img src="https://picsum.photos/400/250" alt="Post image" class="post-image">
+        <div class="post-actions">
+            <span class="action"><i class="fa-regular fa-comment"></i> 12</span>
+            <span class="action"><i class="fa-solid fa-retweet"></i> 5</span>
+            {% include "___heart.html" %}
+            <span class="action"><i class="fa-solid fa-chart-simple"></i> 230</span>
+            <span class="action"><i class="fa-solid fa-share"></i></span>
         </div>
-        {% include "___heart.html" %}
     </div>
-</div>
+</article>

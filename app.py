@@ -109,9 +109,22 @@ def handle_signup():
 @app.get("/home")
 @x.no_cache
 def view_home():
-    #user = session.get("user", "")
-   # if not user: return redirect(url_for("view_login"))
-    return render_template("home.html")
+    try:
+        #user = session.get("user", "")
+        # if not user: return redirect(url_for("view_login"))
+        db, cursor = x.db()
+        q = "SELECT * FROM users JOIN posts ON user_pk = post_user_fk WHERE user_pk = 1"
+        cursor.execute(q)
+        rows = cursor.fetchall()
+        ic(rows)
+        return render_template("home.html", rows=rows)
+    except Exception as ex:
+        ic(ex)
+        return "error"
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+  
 
 
 
