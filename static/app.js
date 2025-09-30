@@ -18,11 +18,15 @@ async function save() {
         method: "POST",
         body: new FormData(theForm)
     })
-    const dataFromServer = await conn.text()
+    const dataFromServer = await conn.json()
     console.log(dataFromServer)
-    document.querySelector("#message").innerHTML = dataFromServer
+    // document.querySelector("#message").innerHTML = dataFromServer
+    document.querySelector("#message").innerHTML = `Hi ${dataFromServer.user_name} ${dataFromServer.user_last_name} ${dataFromServer.user_nickname}`
 }
 
+async function likeTweet() {
+    console.log("like tweet")
+}
 
 
 

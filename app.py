@@ -205,10 +205,18 @@ def view_ajax_post():
 @app.post("/save")
 def api_save():
     try:
-       user_name = request.form.get("user_name", "give me a name")
+       user_name = request.form.get("user_name", "")
        user_last_name = request.form.get("user_last_name", "")
        user_nickname = request.form.get("user_nickname", "")
-       return f"Hi {user_name} {user_last_name} {user_nickname}"
+
+        ## Dictionary in Python is JSON in Javascript
+       user = {
+        "user_name" : user_name.title(),
+        "user_last_name" : user_last_name.title(),
+        "user_nickname" : user_nickname.title()
+        }
+
+       return user
     except Exception as ex:
         ic(ex)
         return "error"
@@ -217,6 +225,16 @@ def api_save():
 
 
 
+##############################
+@app.get("/ajax-heart")
+def view_ajax_heart():
+    try:
+       return render_template("ajax_heart.html")
+    except Exception as ex:
+        ic(ex)
+        return "error"
+    finally:
+        pass
 
 
 
