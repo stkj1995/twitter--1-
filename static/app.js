@@ -29,7 +29,8 @@ async function likeTweet() {
     const conn = await fetch("/api-like-tweet")
     if(conn.ok){
     const data = await conn.json()
-    document.querySelector("button").textContent = "heart solid"
+    document.querySelector("#like_tweet").classList.toggle("hidden")
+    document.querySelector("#unlike_tweet").classList.toggle("hidden")
     }else{
     console.log("error")
     }
@@ -40,7 +41,8 @@ async function unlikeTweet() {
     const conn = await fetch("/api-unlike-tweet")
     if(conn.ok){
     const data = await conn.json()
-    document.querySelector("button").textContent = "heart solid"
+    document.querySelector("#like_tweet").classList.toggle("hidden")
+    document.querySelector("#unlike_tweet").classList.toggle("hidden")
     }else{
     console.log("error")
     }

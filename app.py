@@ -255,7 +255,24 @@ def api_like_tweet():
     finally:
         pass
 
+##############################
+@app.get("/api-unlike-tweet")
+def api_unlike_tweet():
+    try:
+       # Validate the data
+       # Get the logged user id
+       # Connect to the database
+       # Disconnect from the database
+       # Delete the liking of a tweet in the table
+       # Check that everything went as expected
+       # Reply to the browser information that the tweet is liked
 
+       return {"status":"OK"}
+    except Exception as ex:
+        ic(ex)
+        return {"status":"error"}
+    finally:
+        pass
 
 
 
