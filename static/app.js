@@ -35,7 +35,16 @@ async function likeTweet() {
     }
 }
 
-
+async function unlikeTweet() {
+    console.log("unlike tweet")
+    const conn = await fetch("/api-unlike-tweet")
+    if(conn.ok){
+    const data = await conn.json()
+    document.querySelector("button").textContent = "heart solid"
+    }else{
+    console.log("error")
+    }
+}
 
 
 // function toggle_menu(){

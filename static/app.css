@@ -624,3 +624,9 @@ a {
 .x-dialog__alt a:hover {
   text-decoration: underline;
 }
+
+
+.hidden {
+  display: none;
+  
+}
