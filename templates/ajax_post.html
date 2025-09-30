@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>
+        AJAX POST
+    </h1>
+
+    <form>
+        <input name="user_name" type="text" placeholder="Username">
+        <input name="user_last_name" type="text" placeholder="Lastname">
+        <input name="user_nickname" type="text" placeholder="Nickname">
+        <button onclick="save()" type="button">
+            Save
+        </button>
+    </form>
+
+    <div id="message"></div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+
+</html>

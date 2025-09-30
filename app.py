@@ -167,7 +167,53 @@ def handle_logout():
     finally:
         pass
 
+##############################
+@app.get("/ajax")
+def ajax():
+    try:
+       return render_template("ajax.html")
+    except Exception as ex:
+        ic(ex)
+        return "error"
+    finally:
+        pass
 
+##############################
+@app.get("/tweet")
+def api_tweet():
+    try:
+       return "You did it"
+    except Exception as ex:
+        ic(ex)
+        return "error"
+    finally:
+        pass
+
+##############################
+@app.get("/ajax-post")
+def view_ajax_post():
+    try:
+       return render_template("ajax_post.html")
+    except Exception as ex:
+        ic(ex)
+        return "error"
+    finally:
+        pass
+
+    
+##############################
+@app.post("/save")
+def api_save():
+    try:
+       user_name = request.form.get("user_name", "give me a name")
+       user_last_name = request.form.get("user_last_name", "")
+       user_nickname = request.form.get("user_nickname", "")
+       return f"Hi {user_name} {user_last_name} {user_nickname}"
+    except Exception as ex:
+        ic(ex)
+        return "error"
+    finally:
+        pass
 
 
 
