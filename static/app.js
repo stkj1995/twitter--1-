@@ -26,6 +26,13 @@ async function save() {
 
 async function likeTweet() {
     console.log("like tweet")
+    const conn = await fetch("/api-like-tweet")
+    if(conn.ok){
+    const data = await conn.json()
+    document.querySelector("button").textContent = "heart solid"
+    }else{
+    console.log("error")
+    }
 }
 
 

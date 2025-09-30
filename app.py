@@ -236,7 +236,24 @@ def view_ajax_heart():
     finally:
         pass
 
+##############################
+@app.get("/api-like-tweet")
+def api_like_tweet():
+    try:
+       # TODO: Validate the data
+       # TODO: Get the logged user id
+       # TODO: Connect to the database
+       # TODO: Disconnect from the database
+       # TODO: Insert the liking of a tweet in the table
+       # TODO: Check that everything went as expected
+       # TODO: Reply to the browser information that the tweet is liked
 
+       return {"status":"OK"}
+    except Exception as ex:
+        ic(ex)
+        return {"status":"error"}
+    finally:
+        pass
 
 
 
