@@ -275,8 +275,35 @@ def api_unlike_tweet():
         pass
 
 
+##############################
+@app.get("/ajax-bookmark")
+def view_ajax_bookmark():
+    try:
+       return render_template("ajax_bookmark.html")
+    except Exception as ex:
+        ic(ex)
+        return "error"
+    finally:
+        pass
 
-
-
+##############################
+@app.post("/api-bookmark")
+def api_bookmark():
+    try:
+       return """
+        <mixhtml mix-replace='button'>
+            <button mix-post="/api-remove-bookmark">
+                 <i class="fa-solid fa-bookmark"></i>
+            </button>
+        </mixhtml>
+        <mixhtml mix-top="button">
+            <div mix-ttl="5000" mix-fade-out>I will disappear</div>
+        </mixhtml>
+        """
+    except Exception as ex:
+        ic(ex)
+        return "error"
+    finally:
+        pass
 
 
