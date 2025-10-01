@@ -48,6 +48,26 @@ async function unlikeTweet() {
     }
 }
 
+let currentPage = 1;
+
+async function showMoreTweets() {
+    currentPage++;  // next page
+    const conn = await fetch(`/api-get-tweets?page=${currentPage}`);
+    if (conn.ok) {
+        const html = await conn.text();
+        // mixhtml syntax: append new tweets and replace the button
+        document.querySelector("#tweets").insertAdjacentHTML("beforeend", html);
+
+        // optionally, check if there’s still a #show_more link
+        if (!document.querySelector("#show_more a")) {
+            document.getElementById("show_more").style.display = "none";
+        }
+    } else {
+        console.log("Error loading more tweets");
+    }
+}
+
+
 
 // function toggle_menu(){
 //     const main_menu = document.querySelector(".main_one")

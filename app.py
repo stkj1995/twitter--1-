@@ -276,6 +276,62 @@ def api_unlike_tweet():
 
 
 ##############################
+@app.get("/api-get-tweets")
+def api_get_tweets():
+    try:
+        limit = 2
+        page = int(request.args.get("page", "1"))
+        if page < 1:
+            page = 1
+        offset = (page - 1) * limit
+
+        db, cursor = x.db()  # assume cursor is a dict cursor
+
+        # total number of posts
+        cursor.execute("SELECT COUNT(*) as total FROM posts")
+        total_rows = cursor.fetchone()['total']  # <-- use the key, not [0]
+
+        # fetch posts for this page
+        q = "SELECT * FROM posts LIMIT %s, %s"
+        cursor.execute(q, (offset, limit))
+        rows = cursor.fetchall()
+
+        # if no rows, return empty mixhtml containers
+        if not rows:
+            return """
+            <mixhtml mix-bottom="#tweets"></mixhtml>
+            <mixhtml mix-replace="#show_more"></mixhtml>
+            """
+
+        # render tweets
+        container = "".join([render_template("_tweet.html", row=row) for row in rows])
+
+        # only render "Show more" if more tweets exist
+        new_hyperlink = ""
+        if offset + limit < total_rows:
+            new_hyperlink = render_template("___show_more.html", next_page=page+1)
+
+        return f"""
+        <mixhtml mix-bottom="#tweets">
+            {container}
+        </mixhtml>
+        <mixhtml mix-replace="#show_more">
+            {new_hyperlink}
+        </mixhtml>
+        """
+
+    except Exception as ex:
+        import traceback
+        traceback.print_exc()
+        return "error"
+    finally:
+        if "cursor" in locals():
+            cursor.close()
+        if "db" in locals():
+            db.close()
+
+
+##############################
 @app.get("/ajax-bookmark")
 def view_ajax_bookmark():
     try:
