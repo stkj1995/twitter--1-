@@ -276,40 +276,27 @@ def api_unlike_tweet():
 
 
 ##############################
-@app.get("/api-get-tweets")
+@app.get ("/api-get-tweets")
 def api_get_tweets():
     try:
-        limit = 2
-        page = int(request.args.get("page", "1"))
-        if page < 1:
-            page = 1
-        offset = (page - 1) * limit
+        next_page = int(request.args.get("page", ""))
+        # ic(next_page)
+        db, cursor = x.db()
+        q = "SELECT * FROM users JOIN posts ON user_pk = post_user_fk LIMIT %s,3"
+        cursor.execute(q, (next_page*2,))
+        tweets = cursor.fetchall()
+        ic(tweets)
+        
+        container = ""
+        for tweet in tweets[:2]:
+            html_items = render_template("_tweet.html", tweet=tweet)
+            container = container + html_items
+        # ic(container)
 
-        db, cursor = x.db()  # assume cursor is a dict cursor
-
-        # total number of posts
-        cursor.execute("SELECT COUNT(*) as total FROM posts")
-        total_rows = cursor.fetchone()['total']  # <-- use the key, not [0]
-
-        # fetch posts for this page
-        q = "SELECT * FROM posts LIMIT %s, %s"
-        cursor.execute(q, (offset, limit))
-        rows = cursor.fetchall()
-
-        # if no rows, return empty mixhtml containers
-        if not rows:
-            return """
-            <mixhtml mix-bottom="#tweets"></mixhtml>
-            <mixhtml mix-replace="#show_more"></mixhtml>
-            """
-
-        # render tweets
-        container = "".join([render_template("_tweet.html", row=row) for row in rows])
-
-        # only render "Show more" if more tweets exist
-        new_hyperlink = ""
-        if offset + limit < total_rows:
-            new_hyperlink = render_template("___show_more.html", next_page=page+1)
+        if(len(tweets) == 3):
+            new_hyperlink = render_template("___show_more_tweets.html", next_page=next_page+1)
+        else:
+            new_hyperlink = ""
 
         return f"""
         <mixhtml mix-bottom="#tweets">
@@ -319,16 +306,14 @@ def api_get_tweets():
             {new_hyperlink}
         </mixhtml>
         """
-
+        # return render_template("items.html", items=items)
     except Exception as ex:
-        import traceback
-        traceback.print_exc()
+        ic(ex)
         return "error"
     finally:
-        if "cursor" in locals():
-            cursor.close()
-        if "db" in locals():
-            db.close()
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+        pass
 
 
 ##############################
@@ -364,58 +349,63 @@ def api_bookmark():
 
 
 ##############################
-@app.get("/items")
+@app.get ("/items")
 def view_items():
     try:
-       next_page = 2
-       db, cursor = x.db()
-       q = "SELECT * FROM posts LIMIT 0, 2"
-       cursor.execute(q)
-       items = cursor.fetchall()
-       ic(items)
-       return render_template("items.html", items=items, next_page=next_page)
+        next_page = 1
+        db, cursor = x.db()
+        q = "SELECT * FROM posts LIMIT 0,2"
+        cursor.execute(q)
+        items = cursor.fetchall()
+        ic(items)
+        return render_template("items.html", items=items, next_page=next_page)
     except Exception as ex:
         ic(ex)
         return "error"
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+        pass
+
 
 
 ##############################
-@app.get("/api-get-items")
+@app.get ("/api-get-items")
 def api_get_items():
     try:
-        next_page = int(request.args.get("page", "")) # 2
+        next_page = int(request.args.get("page", ""))
         ic(next_page)
-        db,cursor = x.db()
-        q = "SELECT * FROM posts LIMIT %s,2"
-        cursor.execute(q, (next_page,))
+        db, cursor = x.db()
+        q = "SELECT * FROM posts LIMIT %s,3"
+        cursor.execute(q, (next_page*2,))
         items = cursor.fetchall()
         ic(items)
+        
         container = ""
-        for item in items:
-            html_item = render_template("_item.html", item=item)
-            container = container + html_item
+        for item in items[:2]:
+            html_items = render_template("_item.html", item=item)
+            container = container + html_items
         ic(container)
- 
-        new_hyperlink = render_template("___show_more.html", next_page=next_page+1)
- 
+
+        if(len(items) == 3):
+            new_hyperlink = render_template("___show_more.html", next_page=next_page+1)
+        else:
+            new_hyperlink = ""
+
         return f"""
- 
         <mixhtml mix-bottom="#items">
             {container}
-        </mixhtml>        
- 
+        </mixhtml>
         <mixhtml mix-replace="#show_more">
-            { new_hyperlink }
-        </mixhtml>        
+            {new_hyperlink}
+        </mixhtml>
         """
-        
+        # return render_template("items.html", items=items)
     except Exception as ex:
         ic(ex)
         return "error"
-    
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+        pass
+

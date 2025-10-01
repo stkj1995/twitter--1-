@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='mixhtml.js') }}" defer></script>
     <title>Welcome home </title>
 </head>
 
@@ -52,62 +53,44 @@
         </nav>
 
         <main>
-
-            <div id="tweets" >
-                {% for row in rows[:2] %} {# only first 2 tweets initially #}
+            <main id="tweets">
+                {% for tweet in tweets: %}
                 {% include "_tweet.html" %}
                 {% endfor %}
-            </div>
 
-            <div id="show_more">
-                {% if rows|length > 2 %}
-                <a href="/api-get-tweets?page=2" mix-get>
-                    Show more
-                </a>
-                {% endif %}
-            </div>
+            </main>
+            {% include "___show_more_tweets.html" %}
         </main>
-
-
-
         <aside>
             <form action="">
                 <input type="text" placeholder="Search Twitter">
                 <button>Search</button>
             </form>
-
             <div class="happening-now">
-                <h2>What's happening now?</h2>
+                <h2>What's happening now</h2>
                 <div class="trending">
-                    <!-- _trends.html -->
-                    {% for row in trends %}
-                    {% include "_trends.html" %}
+                    {% for trend in trends: %}
+                    {% include "_trend.html" %}
                     {% endfor %}
+
+                    <button class="show-more-btn">Show more</button>
                 </div>
+
             </div>
-
-
             <hr>
-
             <div class="who-to-follow">
                 <h2>Who to follow</h2>
-
                 <div class="follow-suggestion">
 
-                    <!-- _follow.html -->
-                    {% for row in follow_suggestions %}
-                    {% include "_follow.html" %}
+                    {% for user in users_rows %}
+                    {% include "_who_to_follow.html" %}
                     {% endfor %}
+
+                    <button class="show-more-btn">Show more</button>
                 </div>
-                <button class="show-more-btn">Show more</button>
             </div>
-
-
         </aside>
     </div>
-
-    <script src="{{ url_for('static', filename='mixhtml.js') }}"></script>
-
 </body>
 
 </html>
