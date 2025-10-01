@@ -311,48 +311,56 @@ def api_bookmark():
 @app.get("/items")
 def view_items():
     try:
-       db, cursor = x.db()
-       q = "SELECT * FROM posts LIMIT 0, 2"
-       cursor.execute(q)
-       items = cursor.fetchall()
-       ic(items)
-       return render_template("items.html", items=items)
+        next_page = 2
+        db,cursor = x.db()
+        q = "SELECT * FROM posts LIMIT 0,2"
+        cursor.execute(q)
+        items = cursor.fetchall()
+        ic(items)
+        return render_template("items.html", items=items, next_page=next_page)
+        
     except Exception as ex:
         ic(ex)
         return "error"
+    
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
-
-
+ 
 ##############################
 @app.get("/api-get-items")
 def api_get_items():
     try:
         next_page = int(request.args.get("page", "")) # 2
         ic(next_page)
-        db, cursor = x.db()
-        q = "SELECT * FROM posts LIMIT %s, 2"
+        db,cursor = x.db()
+        q = "SELECT * FROM posts LIMIT %s,2"
         cursor.execute(q, (next_page,))
-        items = cursor.fetchall()        
+        items = cursor.fetchall()
         ic(items)
         container = ""
-
         for item in items:
             html_item = render_template("_item.html", item=item)
             container = container + html_item
         ic(container)
-
+ 
+        new_hyperlink = render_template("___show_more.html", next_page=next_page+1)
+ 
         return f"""
+ 
         <mixhtml mix-bottom="#items">
-        {container}
-        </mixhtml>
+            {container}
+        </mixhtml>        
+ 
+        <mixhtml mix-replace="#show_more">
+            { new_hyperlink }
+        </mixhtml>        
         """
-    
-    
+        
     except Exception as ex:
         ic(ex)
         return "error"
+    
     finally:
-        if "cursor" in locals(): cursor.close()    
-        if "db" in locals(): db.close()    
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
