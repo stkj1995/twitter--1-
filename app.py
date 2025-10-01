@@ -307,3 +307,52 @@ def api_bookmark():
         pass
 
 
+##############################
+@app.get("/items")
+def view_items():
+    try:
+       db, cursor = x.db()
+       q = "SELECT * FROM posts LIMIT 0, 2"
+       cursor.execute(q)
+       items = cursor.fetchall()
+       ic(items)
+       return render_template("items.html", items=items)
+    except Exception as ex:
+        ic(ex)
+        return "error"
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+
+##############################
+@app.get("/api-get-items")
+def api_get_items():
+    try:
+        next_page = int(request.args.get("page", "")) # 2
+        ic(next_page)
+        db, cursor = x.db()
+        q = "SELECT * FROM posts LIMIT %s, 2"
+        cursor.execute(q, (next_page,))
+        items = cursor.fetchall()        
+        ic(items)
+        container = ""
+
+        for item in items:
+            html_item = render_template("_item.html", item=item)
+            container = container + html_item
+        ic(container)
+
+        return f"""
+        <mixhtml mix-bottom="#items">
+        {container}
+        </mixhtml>
+        """
+    
+    
+    except Exception as ex:
+        ic(ex)
+        return "error"
+    finally:
+        if "cursor" in locals(): cursor.close()    
+        if "db" in locals(): db.close()    
