@@ -27,9 +27,13 @@ window.addEventListener("popstate", () => {
     }, 100)
 })
 window.addEventListener("scroll", () => {
-    if (ignoreScroll) return    
-    document.querySelector("[mix-on='yes']").setAttribute("mix-y", window.scrollY) 
+    if (ignoreScroll) return
+    const el = document.querySelector("[mix-on='yes']")
+    if (el) {
+        el.setAttribute("mix-y", window.scrollY)
+    }
 })
+
 // ##############################
 setInterval(async function(){
     try{
